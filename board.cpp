@@ -10,17 +10,25 @@ Board::Board()
 
 	set_pos(1, 1, convert_to_0x88("1d")); // white king
 	set_pos(1, 2, convert_to_0x88("1e")); // white queen
-	set_pos(1, 5, convert_to_0x88("1a")); // white rook
-	set_pos(1, 5, convert_to_0x88("1h")); // white rook
 	set_pos(1, 3, convert_to_0x88("1c")); // white bishop
 	set_pos(1, 3, convert_to_0x88("1f")); // white bishop
-
+	set_pos(1, 4, convert_to_0x88("1b")); // white knight
+	set_pos(1, 4, convert_to_0x88("1g")); // white knight
+	set_pos(1, 5, convert_to_0x88("1a")); // white rook
+	set_pos(1, 5, convert_to_0x88("1h")); // white rook
+	for (int i = 0; i < 8; ++i)
+		set_pos(1, 6, 16 + i);			// all white pawns
+	
 	set_pos(2, 1, convert_to_0x88("8d")); // black king
 	set_pos(2, 2, convert_to_0x88("8e")); // black queen
-	set_pos(2, 5, convert_to_0x88("8a")); // black rook
-	set_pos(2, 5, convert_to_0x88("8h")); // black rook
 	set_pos(2, 3, convert_to_0x88("8c")); // black bishop
 	set_pos(2, 3, convert_to_0x88("8f")); // black bishop
+	set_pos(2, 4, convert_to_0x88("8b")); // black knight
+	set_pos(2, 4, convert_to_0x88("8g")); // black knight
+	set_pos(2, 5, convert_to_0x88("8a")); // black rook
+	set_pos(2, 5, convert_to_0x88("8h")); // black rook
+	for (int i = 0; i < 8; ++i)
+		set_pos(2, 6, 16*6 + i);		// all black pawns
 }
 
 void Board::set_pos(int col, int piece, int pos)
@@ -51,7 +59,7 @@ bool Board::move(std::string src, std::string dest)
 		return 0;
 	int piece = (block[index_of(s)] & 0x0F00) >> 8;
 	switch (piece) {
-		case 1: if (k.move(s, d) && clear_path(s, d))
+		case 1: if (k.move(s, d)) // no clear_path needed
 					update(s, d);
 				else
 					return 0;
@@ -66,7 +74,18 @@ bool Board::move(std::string src, std::string dest)
 				else
 					return 0;
 				break;
+		case 4: if (n.move(s, d)) // no clear_path required for knight
+					update(s, d);
+				else
+					return 0;
+				break;
 		case 5: if(r.move(s, d) && clear_path(s, d))
+					update(s, d);
+				else
+					return 0;
+				break;
+		case 6: if (p.move(block[index_of(s)], block[index_of(d)]) 
+						&& clear_path(s, d))		//clear_path in case of 2 step move
 					update(s, d);
 				else
 					return 0;

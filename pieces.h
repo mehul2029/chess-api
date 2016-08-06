@@ -14,24 +14,28 @@ public:
 };
 
 class Queen : public Pieces {
-	public:
+public:
 	bool move(int, int);
 };
 
 class Rook : public Pieces {
-	public:
+public:
 	bool move(int, int);
 };
 
 class Bishop : public Pieces {
-	public:
+public:
 	bool move(int, int);
 };
-/*
+
 class Knight : public Pieces {
+public:
+	bool move(int, int);
 };
 
 class Pawn : public Pieces {
+public:
+	bool move(int, int);
 };
-*/
+
 #endif
